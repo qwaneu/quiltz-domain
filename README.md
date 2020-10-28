@@ -68,3 +68,14 @@ validator +-[hidden]- parsers
 @enduml
 
 -->
+![domain-lib](doc/images/domain-lib.svg)
+
+## id
+
+## validations
+
+## parsers
+
+## results
+
+## anonymizer
