@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
   long_description = fh.read()
 
 setup(
-  name='quiltz',  
+  name='quiltz-domain',  
   version=version,
   author="Rob Westgeest",
   author_email="rob@qwan.eu",
