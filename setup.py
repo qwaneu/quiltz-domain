@@ -14,7 +14,7 @@ setup(
   description="A domain utility module for python",
   long_description=long_description,
   long_description_content_type="text/markdown",
-  url="https://github.com/qwaneu/quiltz",
+  url="https://github.com/qwaneu/quiltz-domain",
   packages=find_packages(where='src'),
   package_dir={'':'src'},
   classifiers=[
