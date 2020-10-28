@@ -28,22 +28,19 @@ pip install quitlz-domain
 skinparam {
   handwritten true
   monochrome true
+  linetype ortho
 }
 hide <<functions>> circle
 hide <<functions>> attributes
 hide <<functions>> stereotype
+
 package quiltz.domain {
-  package id {
-    class ID
-    class IDGenerator
-    class FixedIDGeneratorGenerating
-  }
   package results {
     class Success
     class Failure
   }
   package validator {
-    class validator-functions <<functions>> {
+    class validatorfunctions <<functions>> {
       validate()
       optionality_of()
       max_length_of()
@@ -53,18 +50,26 @@ package quiltz.domain {
     }
   }
   package parsers {
-    class parser-functions <<functions>> {
+    class parserfunctions <<functions>> {
       date_from_iso()
       int_from_string()
     }
   }
   package anonymizer {
-    class anonymizer-functions <<functions>> {
+    class anonymizerfunctions <<functions>> {
       anonymize()
     }
   }
+  package id {
+    class ID
+    class IDGenerator
+    class FixedIDGeneratorGenerating
+  }
 }
-validator +-[hidden]- parsers
+validator .> parsers
+validator .> results
+parsers ..> results
+
 @enduml
 
 -->
