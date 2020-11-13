@@ -54,6 +54,9 @@ parsers ..> results
 
 ## id
 
+The `id` module contains a uuid based `ID` concept. The `ID`s can 
+`ID` 
+
 ## validations
 
 ## parsers
