@@ -1,4 +1,5 @@
 from .results import Success, Failure
+from inspect import signature
 
 class Parameters(dict):
     def __init__(self, *args, **kwargs):
@@ -68,8 +69,12 @@ class ConversionOf(Validator):
         self.type_to_convert_to = type_to_convert_to
     
     def validate(self, results):
-        return (self.type_to_convert_to.parse_from(self.value)
-                .do(lambda result: results.add(self.parameter_name, getattr(result, self.parameter_name))))
+        fn = self.type_to_convert_to.parse_from
+        if 'success_attribute' in signature(fn).parameters:
+            result = self.type_to_convert_to.parse_from(self.value, self.parameter_name)
+        else:
+            result = self.type_to_convert_to.parse_from(self.value)
+        return (result.do(lambda result: results.add(self.parameter_name, getattr(result, self.parameter_name))))
 
 class TryTo(Validator):
     def __init__(self, parameter_name, value, success_attr):

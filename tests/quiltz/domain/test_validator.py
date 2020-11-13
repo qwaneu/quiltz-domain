@@ -1,7 +1,9 @@
+from dataclasses import dataclass
 from testing import *
 from quiltz.domain.results import Success, Failure
-from quiltz.domain.parsers import StringToObjectParser
+from quiltz.domain.parsers import StringToObjectParser, date_from_iso
 from quiltz.domain.validator import validate, conversion_of, presence_of, max_length_of, is_between
+
 
 class TestValidator_presence_of:
     def test_returns_success_when_value_is_present(self):
@@ -26,3 +28,15 @@ class TestValidator_conversion_of:
             equal_to(Failure(message='uh oh')))
 
 
+class TestValidator_conversion_of_other_parameter_support:
+    def test_puts_the_parameter_under_that_name_in_valid_parameters(self):
+        assert_that(validate(conversion_of('kleur', 'red', Color))
+            .map(lambda p: p.kleur),
+            equal_to(Color('red')))
+
+@dataclass
+class Color:
+    color_value: str
+    @staticmethod
+    def parse_from(color_string, success_attribute):
+        return Success(**{success_attribute: Color(color_value=color_string)})
