@@ -14,6 +14,9 @@ class TestIDCreationFromString:
     def test_creates_an_invalid_id_when_the_string_value_is_not_a_valid_uuid(self):
         assert_that(ID.from_string('34').valid, is_(equal_to(False)))
 
+    def test_creates_an_invalid_id_when_the_string_value_is_None(self):
+        assert_that(ID.from_string(None).valid, is_(equal_to(False)))
+
 class TestHashability:
     def test_it_is_hashable_when_valid(self):
         assert_that({ aValidID('34'): 'some_value' }[aValidID('34')], equal_to('some_value'))

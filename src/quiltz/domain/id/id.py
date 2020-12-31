@@ -8,6 +8,8 @@ class ID:
 
     @staticmethod
     def from_string(potential_uuid_value):
+        if not potential_uuid_value:
+            return InvalidID()
         try:
             return ID(UUID_IMPL(potential_uuid_value))
         except ValueError as e:
