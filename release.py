@@ -2,7 +2,7 @@
 import sys
 import re
 import subprocess
-sys.path.append('src')
+sys.path.insert(0,'src')
 from quiltz.domain.version import version
 
 new_version = sys.argv[1]
