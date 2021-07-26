@@ -65,7 +65,7 @@ class TestPartialSucces(ResultContract):
         return PartialSuccess
 
     def test_is_a_success(self):
-        assert_that(PartialSuccess().is_success(), is_(True))
+        assert_that(PartialSuccess().is_success(), is_(False))
 
     def test_is_a_failure(self):
         assert_that(PartialSuccess().is_failure(), is_(True))

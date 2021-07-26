@@ -55,7 +55,7 @@ class Failure(Result):
 
 class PartialSuccess(Result):
     def is_success(self):
-        return True
+        return False
 
     def is_failure(self):
         return True
