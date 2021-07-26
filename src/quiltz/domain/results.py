@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from re import I
 
 @dataclass(init=False)
 class Result:
@@ -9,6 +10,9 @@ class Result:
 
     def __getattr__(self, name):
         return self.body.get(name)
+    
+    def with_attributes(self, **kwargs):
+        return replace(self, **kwargs)
 
 class Success(Result):
     def is_success(self):
@@ -48,3 +52,20 @@ class Failure(Result):
 
     def or_fail_with(self, **kwargs):
         return Failure(**dict(reason=self), **kwargs)
+
+class PartialSuccess(Result):
+    def is_success(self):
+        return True
+
+    def is_failure(self):
+        return True
+
+    def map(self, f):
+        return PartialSuccess(**{**self.body, **f(self).body})
+
+    def do(self, f):
+        f(self)
+        return self
+
+    def or_fail_with(self, **kwargs):
+        return self
