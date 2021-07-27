@@ -13,7 +13,7 @@ class ResultContract:
         assert_that(result_class(some_random_attribute="some_value").body, equal_to(dict(some_random_attribute="some_value")))
     
     def test_can_add_an_attribute(self, result_class):
-        assert_that(result_class().with_attributes(some_other_attribute="some_other_value").some_other_attribute, equal_to("some_other_value"))
+        assert_that(result_class().with_attributes(some_other_attribute="some_other_value"), equal_to(result_class(some_other_attribute="some_other_value")))
 
 class SideEffect:
     def __init__(self):

@@ -12,7 +12,7 @@ class Result:
         return self.body.get(name)
     
     def with_attributes(self, **kwargs):
-        return replace(self, **kwargs)
+        return self.__class__(**{**self.body, **kwargs})
 
 class Success(Result):
     def is_success(self):
