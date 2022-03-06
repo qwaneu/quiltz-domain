@@ -90,7 +90,7 @@ class ValidEmailAddress(Validator):
     def validate(self, results):
         stripped = self.value.strip()
         if not is_valid_email_address(stripped):
-            return Failure(message="{} is not a valid email address".format(self.parameter_name))
+            return Failure(message="{} does not contain a valid email address".format(self.parameter_name))
         results.add(self.parameter_name, stripped)
         return Success()
 

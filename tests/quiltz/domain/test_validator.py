@@ -43,7 +43,7 @@ class TestValidator_valid_email_address:
         assert_that(self.validate('r@qwan.eu'), equal_to('r@qwan.eu'))
 
     def test_returns_failure_when_value_is_not_valid(self):
-        assert_that(self.validate('bla1234'), equal_to(Failure(message='email_parameter is not a valid email address')))
+        assert_that(self.validate('bla1234'), equal_to(Failure(message='email_parameter does not contain a valid email address')))
         assert_that(self.validate('.rob@qwan.eu').is_failure(), equal_to(True))
 
     def test_strips_spaces(self):
