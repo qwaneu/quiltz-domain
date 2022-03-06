@@ -37,6 +37,11 @@ package quiltz.domain {
       anonymize()
     }
   }
+  package email {
+    class emailfunctions <<functions>> {
+      is_valid_email_address()
+    }
+  }
   package id {
     class ID
     class IDGenerator
@@ -205,12 +210,13 @@ The successful result from `validate` can be mapped to whatever you'd like to do
 
 ```python
 from quiltz.domain.results import Success
-from quiltz.domain.validator import validate, presence_of, max_length_of, is_between
+from quiltz.domain.validator import validate, presence_of, max_length_of, email_validity_of, is_between
 
-def create(team=None, participant_count=0):
+def create(team=None, email="", participant_count=0):
     return validate(
         presence_of('team', team),
         max_length_of('team', team, 140),
+        email_validity_of('email', email),
         is_between('participant_count', participant_count, 1, 30),
     ).map(lambda valid_parameters:
         Success(product=MyProduct(
@@ -218,17 +224,20 @@ def create(team=None, participant_count=0):
                           participants=valid_parameters.participant_count))
     )
 
-create(team='Team A', participant_count=2, language='en')
+create(team='Team A', email='john@mail.com', participant_count=2)
 # Success(body={'product': <__main__.Product object at 0x7f8548df8310>})
 
-create(team=None, participant_count=2, language='en')
+create(team=None, email='john@mail.com', participant_count=2)
 # Failure(body={'message': 'team is missing'})
 
-create(team='Team A', participant_count=100, language='en')
+create(team='Team A', email='john@mail.com', participant_count=100)
 # Failure(body={'message': 'participant_count should be between 1 and 30'})
 
-create(team='Team A', participant_count=100, language='xx')
+create(team='Team A', email='john@mail.com', participant_count=100)
 # Failure(body={'message': "language 'x' is not a valid language"})
+
+create(team='Team A', email='x', participant_count=5)
+# Failure(body={'message': "email does not contain a valid email address"})
 ```
 
 The `conversion_of` function takes a parameter name, an input value and a class to which the value should be converted. This class should have a static `parse_from` function, which should return a `Result` object
@@ -302,4 +311,18 @@ anonymize('me@qwan.eu')
 
 anonymize('not an email address')
 # 'not an email address'
+```
+
+## email
+
+The `email` module contains the `is_valid_email_address` function to check email address validity.
+
+```python
+from quiltz.domain.email import is_valid_email_address
+
+is_valid_email_address('john@mail.com')
+# True
+
+is_valid_email_address('bla1234')
+# False
 ```
