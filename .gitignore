@@ -8,3 +8,5 @@ src/quiltz.egg-info/
 reports/
 venv/**/*
 tests/data/**/*
+.idea
+.vscode

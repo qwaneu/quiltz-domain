@@ -1,4 +1,4 @@
-## modules in this package
+## Modules in this package
 
 <!--
 @startuml domain-lib
@@ -247,9 +247,9 @@ class Language(Enum):
         try:
             return Success(language=Language(text.lower()))
         except AttributeError:
-            return Failure(message="language '{}' is not a valid language".format(text))
+            return Failure(message="language '{}' is not valid".format(text))
         except ValueError:
-            return Failure(message="language '{}' is not a valid language".format(text))
+            return Failure(message="language '{}' is not valid".format(text))
 
 def create_language(language="en"):
         return validate(
