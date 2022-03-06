@@ -1,3 +1,9 @@
+# 0.6.0
+
+Added email validator
+
+# 0.5.2
+
 # 0.4.0
 
 handle null value for id string in parse from to return invalid id
