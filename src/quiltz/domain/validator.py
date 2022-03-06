@@ -1,3 +1,4 @@
+from .email import is_valid_email_address
 from .results import Success, Failure
 from inspect import signature
 
@@ -85,6 +86,15 @@ class ConversionOf(Validator):
         return result.do(lambda result: results.add(self.parameter_name, getattr(result, self.parameter_name)))
 
 
+class ValidEmailAddress(Validator):
+    def validate(self, results):
+        stripped = self.value.strip()
+        if not is_valid_email_address(stripped):
+            return Failure(message="{} is not a valid email address".format(self.parameter_name))
+        results.add(self.parameter_name, stripped)
+        return Success()
+
+
 class TryTo(Validator):
     def __init__(self, parameter_name, value, success_attr):
         super().__init__(parameter_name, value)
@@ -115,6 +125,10 @@ def is_between(parameter, value, lower_bound, upper_bound):
 
 def conversion_of(parameter, value, type_to_convert_to):
     return ConversionOf(parameter, value, type_to_convert_to)
+
+
+def email_validity_of(parameter, value):
+    return ValidEmailAddress(parameter, value)
 
 
 def an_attempt_to(value, parameter, success_attr):
