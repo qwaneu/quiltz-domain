@@ -1,6 +1,7 @@
 from .results import Success, Failure
 from inspect import signature
 
+
 class Parameters(dict):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -8,6 +9,7 @@ class Parameters(dict):
 
     def with_attribute(self, parameter_name, value):
         return Parameters({**{parameter_name: value}, **self})
+
 
 class ValidationResults:
     def __init__(self):
@@ -19,10 +21,12 @@ class ValidationResults:
     def map(self, fn):
         return fn(self.valid_parameters)
 
+
 class Validator:
     def __init__(self, parameter_name, value):
         self.parameter_name = parameter_name
         self.value = value
+
 
 class PresenceOf(Validator):
     def validate(self, results):
@@ -31,10 +35,12 @@ class PresenceOf(Validator):
         results.add(self.parameter_name, self.value)
         return Success()
 
+
 class OptionalityOf(Validator):
     def validate(self, results):
         results.add(self.parameter_name, self.value)
         return Success()
+
 
 class MaxLengthOf(Validator):
     def __init__(self, parameter, value, max):
@@ -46,6 +52,7 @@ class MaxLengthOf(Validator):
             return Failure(message="{} is too long".format(self.parameter_name))
         results.add(self.parameter_name, self.value)
         return Success()
+
 
 class IsBetween(Validator):
     def __init__(self, parameter, value, lower_bound, upper_bound):
@@ -59,9 +66,10 @@ class IsBetween(Validator):
                 .do(lambda result: results.add(self.parameter_name, result.value)))
 
     def _is_between(self, result):
-        if result.value >= self.lower_bound and result.value <= self.upper_bound:
+        if self.lower_bound <= result.value <= self.upper_bound:
             return Success(value=result.value) 
         return Failure(message='{} should be between {} and {}'.format(self.parameter_name, self.lower_bound, self.upper_bound))
+
 
 class ConversionOf(Validator):
     def __init__(self, parameter, value, type_to_convert_to):
@@ -74,7 +82,8 @@ class ConversionOf(Validator):
             result = self.type_to_convert_to.parse_from(self.value, self.parameter_name)
         else:
             result = self.type_to_convert_to.parse_from(self.value)
-        return (result.do(lambda result: results.add(self.parameter_name, getattr(result, self.parameter_name))))
+        return result.do(lambda result: results.add(self.parameter_name, getattr(result, self.parameter_name)))
+
 
 class TryTo(Validator):
     def __init__(self, parameter_name, value, success_attr):
@@ -91,20 +100,26 @@ class TryTo(Validator):
 def presence_of(parameter, value):
     return PresenceOf(parameter, value)
 
+
 def optionality_of(parameter, value):
     return OptionalityOf(parameter, value)
+
 
 def max_length_of(parameter, value, max):
     return MaxLengthOf(parameter, value, max)
 
+
 def is_between(parameter, value, lower_bound, upper_bound):
     return IsBetween(parameter, value, lower_bound, upper_bound)
+
 
 def conversion_of(parameter, value, type_to_convert_to):
     return ConversionOf(parameter, value, type_to_convert_to)
 
+
 def an_attempt_to(value, parameter, success_attr):
     return TryTo(parameter, value, success_attr=success_attr)
+
 
 def validate(*validations):
     validation_results = ValidationResults()
@@ -114,8 +129,9 @@ def validate(*validations):
             return last_result
     return validation_results
 
+
 def int_from_string(string_value, name):
-    if (string_value is None): return Failure(message="{} is missing".format(name))
+    if string_value is None: return Failure(message="{} is missing".format(name))
     try: 
         return Success(value=int(string_value))
     except ValueError:

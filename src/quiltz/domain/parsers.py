@@ -11,6 +11,7 @@ class StringToDateParser():
         except ValueError as e:
             return Failure(message=str(e))
 
+
 class StringToIntParser:
     def parse_from(self, int_string, success_attribute='int_val'):
         try:
@@ -18,7 +19,8 @@ class StringToIntParser:
         except ValueError as e:
             return Failure(message="'{}' is not a valid integer".format(int_string))
 
+
 date_from_iso = StringToDateParser()
 
-int_from_string = StringToIntParser()
 
+int_from_string = StringToIntParser()

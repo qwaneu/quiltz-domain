@@ -2,6 +2,7 @@ import uuid
 from uuid import UUID as UUID_IMPL
 from dataclasses import dataclass, field
 
+
 @dataclass(frozen=True)
 class ID:
     _uuid: UUID_IMPL
@@ -26,9 +27,11 @@ class ID:
     def __str__(self):
         return str(self._uuid)
 
+
 class IDGenerator(object):
     def generate_id(self):
         return ID(uuid.uuid4())
+
 
 class FixedIDGeneratorGenerating(IDGenerator):
     def __init__(self, *ids):
@@ -41,21 +44,25 @@ class FixedIDGeneratorGenerating(IDGenerator):
         self.index = (self.index + 1) % len(self.ids)
         return self.ids[self.index]
 
+
 class InvalidValidGenerator:
-    counter=0
+    counter = 0
+
     @staticmethod
     def next_invalid_value():
         print('generating')
         return 'invalid_id_{}'.format(InvalidValidGenerator.next())
+
     @staticmethod
     def next():
         InvalidValidGenerator.counter += 1
         return InvalidValidGenerator.counter
 
+
 @dataclass(frozen=True)
 class InvalidID:
     value: str = field(default_factory=InvalidValidGenerator.next_invalid_value)
-    
+
     @property
     def valid(self):
         return False
