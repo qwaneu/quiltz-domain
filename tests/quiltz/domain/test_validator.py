@@ -1,7 +1,7 @@
 from dataclasses import dataclass
+
 from testing import *
-from quiltz.domain.results import Success, Failure
-from quiltz.domain.validator import validate, conversion_of, presence_of, email_validity_of
+from quiltz.domain.validator import *
 
 
 class TestValidator_presence_of:
@@ -15,6 +15,17 @@ class TestValidator_presence_of:
             .map(lambda p: p.some_parameter),
             equal_to(Failure(message='some_parameter is missing')))
 
+
+class TestValidator_optionality_of:
+    def test_returns_success_with_value_when_value_is_present(self):
+        assert_that(validate(optionality_of('some_parameter', 'value'))
+            .map(lambda p: p.some_parameter),
+            equal_to('value'))
+
+    def test_returns_success_with_none_when_value_is_not_present(self):
+        assert_that(validate(optionality_of('some_parameter', None))
+            .map(lambda p: p.some_parameter),
+            is_(None))
 
 class TestValidator_conversion_of:
     def test_validates_a_conversion_that_potentially_returns_failure(self):
@@ -49,6 +60,17 @@ class TestValidator_valid_email_address:
     def test_strips_spaces(self):
         assert_that(self.validate('\u00a0 henk@email.com  \t '), equal_to('henk@email.com'))
 
+
+class TestValidator_optional:
+    def test_returns_success_with_validated_value_when_value_is_present(self):
+        assert_that(validate(optional(email_validity_of("email_param", "r@qwan.eu")))
+            .map(lambda p: p.email_param),
+            equal_to("r@qwan.eu"))
+
+    def test_returns_success_with_none_value_when_value_is_not_present(self):
+        assert_that(validate(optional(email_validity_of("email_param", None)))
+            .map(lambda p: p.email_param),
+            is_(None))
 
 @dataclass
 class ColorWithSuccessAttributeSupport:

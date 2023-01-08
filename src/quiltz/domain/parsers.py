@@ -5,11 +5,11 @@ from .results import Success, Failure
 class StringToDateParser():
     def parse_from(self, date_string, success_attribute='date'):
         if not date_string:
-            return Failure(message='date is missing')
+            return Failure(message=f'{success_attribute} is missing')
         try:
             return Success(**{success_attribute: date.fromisoformat(date_string)})
         except ValueError as e:
-            return Failure(message=str(e))
+            return Failure(message=f'{success_attribute}: {e}')
 
 
 class StringToIntParser:
@@ -21,6 +21,4 @@ class StringToIntParser:
 
 
 date_from_iso = StringToDateParser()
-
-
 int_from_string = StringToIntParser()

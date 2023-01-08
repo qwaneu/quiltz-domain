@@ -11,10 +11,10 @@ class TestDateconversion:
         assert_that(date_from_iso.parse_from("2020-10-08", success_attribute='some_date'), equal_to(Success(some_date=date(2020,10,8))))
 
     def test_returns_failure_is_date_is_not_an_iso_string(self):
-        assert_that(date_from_iso.parse_from("2020-1008"), equal_to(Failure(message="Invalid isoformat string: '2020-1008'")))
+        assert_that(date_from_iso.parse_from("2020-1008", success_attribute='some_date'), equal_to(Failure(message="some_date: Invalid isoformat string: '2020-1008'")))
 
     def test_returns_failure_is_date_is_not_present(self):
-        assert_that(date_from_iso.parse_from(None), equal_to(Failure(message="date is missing")))
+        assert_that(date_from_iso.parse_from(None, success_attribute='some_date'), equal_to(Failure(message="some_date is missing")))
 
         
 class TestIntFromstring:

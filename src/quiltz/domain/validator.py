@@ -42,6 +42,14 @@ class OptionalityOf(Validator):
         results.add(self.parameter_name, self.value)
         return Success()
 
+class OptionalValidation:
+    def __init__(self, validation: Validator):
+        self._optional_validation = validation
+    def validate(self, results):
+        if self._optional_validation.value == None:
+            results.add(self._optional_validation.parameter_name, None)
+            return Success()
+        return self._optional_validation.validate(results)
 
 class MaxLengthOf(Validator):
     def __init__(self, parameter, value, max):
@@ -134,6 +142,8 @@ def email_validity_of(parameter, value):
 def an_attempt_to(value, parameter, success_attr):
     return TryTo(parameter, value, success_attr=success_attr)
 
+def optional(validation):
+    return OptionalValidation(validation)
 
 def validate(*validations):
     validation_results = ValidationResults()
