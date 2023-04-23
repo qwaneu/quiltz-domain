@@ -14,6 +14,8 @@ class StringToDateParser():
 
 class StringToIntParser:
     def parse_from(self, int_string, success_attribute='int_val'):
+        if not int_string:
+            return Failure(message=f"{success_attribute} is missing")
         try:
             return Success(**{success_attribute: int(int_string)})
         except ValueError as e:

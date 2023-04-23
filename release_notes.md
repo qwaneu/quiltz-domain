@@ -1,3 +1,7 @@
+# 0,8.0
+
+int_from_string fails when int is not present
+
 # 0.6.0
 
 Added email validator
