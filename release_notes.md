@@ -1,4 +1,8 @@
-# 0,8.0
+# 0.8.1
+
+fixed error in build script
+
+# 0.8.0
 
 int_from_string fails when int is not present
 
